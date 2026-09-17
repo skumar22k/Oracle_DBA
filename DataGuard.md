@@ -1,4 +1,4 @@
-# Why We Need to Enable FORCE LOGGING Option in the Data Guard Environment
+# 1. Why We Need to Enable FORCE LOGGING Option in the Data Guard Environment
 
 ``` sql
 ALTER DATABASE FORCE LOGGING;
