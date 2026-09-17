@@ -123,25 +123,25 @@ file.
 
 **Data Protection Modes In Oracle DG :**
 
-## **Maximum Protection:**
+## Maximum Protection:
 
 **This protection mode guarantees that no data loss occurs if the primary database fails.the redo data that is needed to recover  must be written to both the local online redo log and the standby redo log  before the transaction commits. In this mode To ensure that data loss does not occur, the primary database shuts down if redo is not shipped to standby database.**
 
 
 
-## **Maximum Availability:**
+## Maximum Availability:
 
 **It works similar Maximum protection but the primary database does not shut down if redo is not shipped**
 
 **to a remote standby redo log. Instead, the primary database operates in an unsynchronized mode until the fault is corrected and all the gaps in the redo log files are resolved.**
 
-## **Maximum Performance ( Default)**
+## Maximum Performance ( Default)
 
 **     In case of maximum performance this allow a transaction to commit as soon as the redo data needed to recover that transaction is written to the local online redo log.**
 
 **Why we need to enable Force Logging Mode:**
 
-## ** FORCE LOGGING mode is recommended to ensure data consistency and forces redo to be generated even when NOLOGGING operations are executed.**
+## FORCE LOGGING mode is recommended to ensure data consistency and forces redo to be generated even when NOLOGGING operations are executed.
 
 **Standby Redo Logs:**
 
@@ -149,7 +149,7 @@ file.
 
 **Synchronous transport mode,Real-time apply**
 
-# **What is real-time apply in DG ?**
+# What is real-time apply in DG ?
 
 **Log buffer on primary is read by LGWR and sent to redo shipping process LNS. LNS now transfers this to RFS and is written to SRL's. MRP will apply from SRL.**
 
@@ -167,7 +167,7 @@ file.
 
 **the default is AFFIRM when the SYNC attribute is specified and NOAFFIRM when the ASYNC attribute is specified.**
 
-# **Logical Standby Database or SQL Apply Architecture:**
+# Logical Standby Database or SQL Apply Architecture:
 
 **A logical standby database provides benefits in disaster recovery, high availability, and data protection that are similar to those of a physical standby database.**
 
@@ -193,7 +193,7 @@ file.
 
 **When the physical standby database is converted, an implicit guaranteed restore point is created and Flashback Database is enabled.**
 
-# **What is Oracle Active Data Guard:**
+# What is Oracle Active Data Guard:
 
 **Its a new feature of 11g database.**
 
@@ -203,13 +203,13 @@ file.
 
 ** 2. RMAN block change tracking on a physical standby database.**
 
-# **What is fast sync?**
+# What is fast sync?
 
 **Data Guard maximum availability supports the use of the NOAFFIRM redo transport attribute. A standby database returns receipt acknowledgment to its primary database as soon as redo is received in memory. The standby database does not wait for the Remote File Server (RFS) to write to a standby redo log file.**
 
 **This feature provides increased primary database performance in Data Guard configurations using maximum availability and SYNC redo transport. Fast Sync isolates the primary database in a maximum availability configuration from any performance impact due to slow I/O at a standby database.**
 
-# **What is far sync?**
+# What is far sync?
 
 **Oracle Far Sync is an Oracle 12c new feature for Oracle Data Guard. This feature is meant to resolve the performance problems induced by network latency when we maintain a standby database geographically distant of the primary database. In this type of situation we sometimes have to make a compromise between performance and data loss. The Far Sync feature offer you both.**
 
@@ -219,7 +219,7 @@ file.
 
 **In case of an outage on the primary database, the standard failover procedure applies and the far sync instance guarantee that no data is lost during the failover.**
 
-## **Step by step to Creating Standby database**
+## Step by step to Creating Standby database
 
 **1. Enable Forced Logging  (Primary database)**
 
@@ -329,83 +329,83 @@ file.
 
 **SQL> alter database enable block change tracking;**
 
-# **How to Change the protection mode in DG?**
+# How to Change the protection mode in DG?**
 ```
-**show database PROD LogXptMode;**
+show database PROD LogXptMode;
 
-**LogXptMode = 'ASYNC'**
+LogXptMode = 'ASYNC'
 
-**show parameter log\_archive\_dest**
+show parameter log\_archive\_dest
 
-**<< Output formatted below for display >>**
+<< Output formatted below for display >>
 
-**NAME TYPE VALUE**
+NAME TYPE VALUE
 
-**--------------------- ------- ----------------------------**
+--------------------- ------- ----------------------------
 
-**log\_archive\_dest\_1 string LOCATION=**
+log\_archive\_dest\_1 string LOCATION=
 
-**USE\_DB\_RECOVERY\_FILE\_DEST**
+USE\_DB\_RECOVERY\_FILE\_DEST
 
-**log\_archive\_dest\_2 string service=PROD async valid\_for**
+log\_archive\_dest\_2 string service=PROD async valid\_for
 
-**(online\_logfile,primary\_role)**
+(online\_logfile,primary\_role)
 
-**db\_unique\_name=PROD**
+db\_unique\_name=PROD
 
-**DGMGRL> edit database 'PROD' set property**
+DGMGRL> edit database 'PROD' set property
 
-**'LogXptMode'='SYNC';**
+'LogXptMode'='SYNC';
 
-**Property "LogXptMode" updated**
+Property "LogXptMode" updated
 
-**DGMGRL> edit configuration set protection mode as**
+DGMGRL> edit configuration set protection mode as
 
-**maxavailability;**
+maxavailability;
 
-**Succeeded.**
+Succeeded.
 
-**set the protection mode back to MAXPERFORMANCE.**
+set the protection mode back to MAXPERFORMANCE.
 
-**\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~**
 
-**DGMGRL> edit configuration set protection mode as**
 
-**maxperformance;**
+DGMGRL> edit configuration set protection mode as
 
-**Succeeded.**
+maxperformance;
 
-**DGMGRL> edit database PROD set property**
+Succeeded.
 
-**'LogXptMode'='ASYNC';**
+DGMGRL> edit database PROD set property
 
-**Property "LogXptMode" updated**
+'LogXptMode'='ASYNC';
 
-**Enabling Fast-Start Failover**
+Property "LogXptMode" updated
 
-**DGMGRL> edit database pc01prmy**
+Enabling Fast-Start Failover
 
-**> set property FastStartFailoverTarget = PROD;**
+DGMGRL> edit database pc01prmy
 
-**Property "faststartfailovertarget" updated**
+> set property FastStartFailoverTarget = PROD;
 
-**DGMGRL> edit database PROD**
+Property "faststartfailovertarget" updated
 
-**> set property FastStartFailoverTarget = pc01prmy;**
+DGMGRL> edit database PROD
 
-**Property "faststartfailovertarget" updated**
+> set property FastStartFailoverTarget = pc01prmy;
 
-**Set the fast-start failover threshold to 90 seconds.**
+Property "faststartfailovertarget" updated
 
-**DGMGRL> edit configuration**
+Set the fast-start failover threshold to 90 seconds.
 
-**> set property FastStartFailoverThreshold=90;**
+DGMGRL> edit configuration
 
-**Property "faststartfailoverthreshold" updated**
+> set property FastStartFailoverThreshold=90;
 
-**DGMGRL> enable fast\_start failover;**
+Property "faststartfailoverthreshold" updated
 
-**Enabled.**
+DGMGRL> enable fast\_start failover;
+
+Enabled.
 ```
 Putting a database in **FORCE LOGGING** mode will have some
 **performance impact**.
