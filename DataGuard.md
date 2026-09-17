@@ -50,6 +50,15 @@ To check the FORCE LOGGING status of a tablespace:
 SELECT force_logging
 FROM dba_tablespaces;
 ```
+# 2. What is the difference between LOGGING and NOLOGGING in Oracle?
+
+If you specify **LOGGING**, then the creation of a database object, as
+well as subsequent inserts into the object, will be logged in the redo
+log file.
+
+If you specify **NOLOGGING**, then the creation of a database object, as
+well as subsequent conventional inserts, will be logged in the redo log
+file.
 
 ## Performance Impact
 
